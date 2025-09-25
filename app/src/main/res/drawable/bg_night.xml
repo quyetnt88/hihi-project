@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Gradient tím đậm → xanh đen -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:startColor="#2B2E5A"
+                android:endColor="#091126"
+                android:angle="270"/>
+        </shape>
+    </item>
+
+    <!-- Một vài “đốm sao” mềm -->
+    <item android:gravity="top|left" android:top="24dp" android:left="36dp">
+        <shape android:shape="oval">
+            <size android:width="8dp" android:height="8dp"/>
+            <solid android:color="#33FFFFFF"/>
+        </shape>
+    </item>
+    <item android:gravity="top|right" android:top="56dp" android:right="48dp">
+        <shape android:shape="oval">
+            <size android:width="6dp" android:height="6dp"/>
+            <solid android:color="#26FFFFFF"/>
+        </shape>
+    </item>
+    <item android:gravity="center_horizontal|top" android:top="40dp">
+        <shape android:shape="oval">
+            <size android:width="10dp" android:height="10dp"/>
+            <solid android:color="#40FFFFFF"/>
+        </shape>
+    </item>
+
+</layer-list>

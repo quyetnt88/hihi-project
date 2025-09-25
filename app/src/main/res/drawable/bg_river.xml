@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Lớp nền: gradient xanh nước -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:startColor="#CFEFFF"
+            android:endColor="#EAF7FF"
+            android:angle="270"/>
+        </shape>
+    </item>
+
+    <!-- Vệt sáng 1 (hiệu ứng lăn tăn) -->
+    <item android:gravity="center_vertical|left">
+        <shape android:shape="oval">
+            <size android:width="220dp" android:height="40dp"/>
+            <solid android:color="#26FFFFFF"/> <!-- trắng 15% -->
+        </shape>
+    </item>
+
+    <!-- Vệt sáng 2 -->
+    <item android:gravity="center_vertical|right">
+        <shape android:shape="oval">
+            <size android:width="260dp" android:height="46dp"/>
+            <solid android:color="#1FFFFFFF"/> <!-- trắng 12% -->
+        </shape>
+    </item>
+
+    <!-- Vệt sáng 3 -->
+    <item android:gravity="top|center_horizontal" android:top="32dp">
+        <shape android:shape="oval">
+            <size android:width="180dp" android:height="32dp"/>
+            <solid android:color="#14FFFFFF"/> <!-- trắng 8% -->
+        </shape>
+    </item>
+
+</layer-list>
