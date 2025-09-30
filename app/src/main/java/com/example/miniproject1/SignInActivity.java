@@ -53,7 +53,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         if(!validate()) return;
 
         String username = etUsername.getText().toString().trim();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, WelcomeActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
         finish();

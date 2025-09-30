@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MiniProject1">
         <activity
+            android:name=".WelcomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BetActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

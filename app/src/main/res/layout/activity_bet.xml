@@ -1,0 +1,195 @@
+<!-- app/src/main/res/layout/activity_bet.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bet_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số dư: $0"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="#388E3C"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="12dp" />
+
+        <!-- In file: app/src/main/res/layout/activity_bet.xml -->
+        <TextView
+            android:layout_width="943dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:text="Chọn vịt chiến thắng, đặt liều ăn nhiều!"
+            android:textColor="#333"
+            android:textSize="22sp" />
+
+        <!-- CardView for lanes -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            android:layout_marginBottom="16dp"
+            android:background="#FFFFFF"
+            android:layout_marginHorizontal="100dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginHorizontal="10dp">
+
+                <!-- Lane 1-4 (repeat for each lane) -->
+                <!-- Lane 1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="8dp">
+
+                    <CheckBox
+                        android:id="@+id/cbLane1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vịt 1"
+                        android:textColor="#1976D2" />
+
+                    <EditText
+                        android:id="@+id/etLane1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:hint="Số tiền $"
+                        android:inputType="number"
+                        android:background="@drawable/edittext_bg"
+                        android:padding="12dp" />
+                </LinearLayout>
+
+                <!-- Lane 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="8dp">
+
+                    <CheckBox
+                        android:id="@+id/cbLane2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vịt 2"
+                        android:textColor="#1976D2" />
+
+                    <EditText
+                        android:id="@+id/etLane2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:hint="Số tiền $"
+                        android:inputType="number"
+                        android:background="@drawable/edittext_bg"
+                        android:padding="12dp" />
+                </LinearLayout>
+
+                <!-- Lane 3 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="8dp">
+
+                    <CheckBox
+                        android:id="@+id/cbLane3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vịt 3"
+                        android:textColor="#1976D2" />
+
+                    <EditText
+                        android:id="@+id/etLane3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:hint="Số tiền $"
+                        android:inputType="number"
+                        android:background="@drawable/edittext_bg"
+                        android:padding="12dp" />
+                </LinearLayout>
+
+                <!-- Lane 4 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <CheckBox
+                        android:id="@+id/cbLane4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vịt 4"
+                        android:textColor="#1976D2" />
+
+                    <EditText
+                        android:id="@+id/etLane4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:hint="Số tiền $"
+                        android:inputType="number"
+                        android:background="@drawable/edittext_bg"
+                        android:padding="12dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:paddingTop="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FFFFFF"
+                android:strokeColor="#1976D2"
+                android:text="Hủy"
+                android:textColor="#1976D2" />
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConfirm"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#1976D2"
+                android:text="Đặt cược"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
