@@ -22,12 +22,16 @@ public class BetActivity extends AppCompatActivity {
     private Button btnConfirm, btnCancel;
 
     private int balance = 0;
+    private SoundEffects sfx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_bet);
+
+        sfx = new SoundEffects();
+        sfx.load(this, R.raw.click);
 
         cb1 = findViewById(R.id.cbLane1);
         cb2 = findViewById(R.id.cbLane2);
@@ -43,6 +47,15 @@ public class BetActivity extends AppCompatActivity {
         btnConfirm = findViewById(R.id.btnConfirm);
         btnCancel  = findViewById(R.id.btnCancel);
 
+        findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            sfx.play(R.raw.click, 1f);
+            confirmMultiBets();
+        });
+        findViewById(R.id.btnCancel).setOnClickListener(v -> {
+            sfx.play(R.raw.click, 1f);
+            setResult(RESULT_CANCELED);
+            finish();
+        });
         balance = getIntent().getIntExtra(EXTRA_BALANCE, 0);
         tvBalance.setText("Balance: $" + balance);
 
@@ -94,5 +107,11 @@ public class BetActivity extends AppCompatActivity {
 
     private void toast(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (sfx != null) sfx.release();
     }
 }

@@ -3,6 +3,7 @@ package com.example.miniproject1;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar[] lanes;
     private Button btnStart, btnReset, btnBet, btnAddFunds;
     private TextView tvMoney, tvResult;
-
+    private SoundEffects sfx;
+    private MediaPlayer raceBgm;
+    private Runnable hideResultRunnable;
     // Số dư & kèo (key: duckIndex 0..3, value: amount)
     private int balance = 100;
     private final HashMap<Integer, Integer> betsMap = new HashMap<>();
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                             updateMoneyText();
 
                             android.widget.Toast.makeText(this,
-                                    "Đã đặt tổng $" + total + ")",
+                                    "Đã đặt tổng $" + total,
                                     android.widget.Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -68,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean winnerAnnounced = false;
 
     // Cấu hình đua
-    private static final int MAX_PROGRESS = 1000;
+    private static final int MAX_PROGRESS = 1200;
     private static final int STEP_MIN = 2, STEP_MAX = 4;
-    private static final int DELAY_MIN = 25;   // ms
+    private static final int DELAY_MIN = 40;   // ms
     private static final int DELAY_MAX = 120;  // ms
     private static final float SPEED_CHANGE_PROB = 0.12f;
 
@@ -85,6 +88,16 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        sfx = new SoundEffects();
+        sfx.load(this, R.raw.race_start);
+        sfx.load(this, R.raw.win);
+        sfx.load(this, R.raw.lose);
+        sfx.load(this, R.raw.click);
+        sfx.load(this, R.raw.coin);
+
+        raceBgm = android.media.MediaPlayer.create(this, R.raw.main_bg /*đổi thành nhạc đua riêng nếu có*/);
+        raceBgm.setLooping(true);
 
         // Ánh xạ view
         lanes = new SeekBar[]{
@@ -111,19 +124,35 @@ public class MainActivity extends AppCompatActivity {
         tvResult.setAlpha(0f);
 
         // Sự kiện nút
-        btnStart.setOnClickListener(v -> startRace());
-        btnReset.setOnClickListener(v -> resetRace());
+        btnStart.setOnClickListener(v -> {
+            // còi xuất phát
+            sfx.play(R.raw.race_start, 1f);
+
+            // cho còi kêu trước 100–150ms rồi bật nhạc nền (tránh giựt/đá audio focus)
+            handler.postDelayed(this::playRaceMusicFromStart, 120);
+
+            startRace();
+        });
+
+        btnReset.setOnClickListener(v -> {
+            sfx.play(R.raw.click, 1f);
+            resetRace();
+        });
+
         btnBet.setOnClickListener(v -> {
             if (!bettingOpen) {
                 Toast.makeText(this, "Đang đua — tạm khoá đặt cược!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            sfx.play(R.raw.click, 1f);
             Intent i = new Intent(this, BetActivity.class);
             i.putExtra(BetActivity.EXTRA_BALANCE, balance);
             betLauncher.launch(i);
         });
-        btnAddFunds.setOnClickListener(v -> showAddFundsDialog());
-
+        btnAddFunds.setOnClickListener(v -> {
+            sfx.play(R.raw.click, 1f);
+            showAddFundsDialog();
+        });
         updateMoneyText();
     }
 
@@ -194,6 +223,11 @@ public class MainActivity extends AppCompatActivity {
         updateMoneyText();
         stopDuckAnimations();
 
+        if (hideResultRunnable != null) {
+            tvResult.removeCallbacks(hideResultRunnable);
+            hideResultRunnable = null;
+        }
+
         tvResult.setText("");
         tvResult.setVisibility(View.GONE);
         tvResult.setAlpha(0f);
@@ -248,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
                     balance += add;
                     updateMoneyText();
                     Toast.makeText(this, "Đã cộng $" + add, Toast.LENGTH_SHORT).show();
+                    sfx.play(R.raw.coin, 0.9f);
                 })
                 .show();
     }
@@ -270,6 +305,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showResult(String msg, boolean isWin) {
+        sfx.play(isWin ? R.raw.win : R.raw.lose, 1f);
+
+        if (raceBgm != null && raceBgm.isPlaying()) raceBgm.pause();
+
         tvResult.setText(msg);
         try {
             tvResult.setTextColor(getColor(isWin ? R.color.result_win : R.color.result_lose));
@@ -280,5 +319,43 @@ public class MainActivity extends AppCompatActivity {
         tvResult.setVisibility(View.VISIBLE);
         tvResult.setAlpha(0f);
         tvResult.animate().alpha(1f).setDuration(250).start();
+        if (hideResultRunnable != null) {
+            tvResult.removeCallbacks(hideResultRunnable);
+        }
+
+        // Lên lịch ẩn sau 3.5s (3500ms). Đổi 4000 nếu muốn ~4s.
+        hideResultRunnable = () -> {
+            tvResult.animate()
+                    .alpha(0f)
+                    .setDuration(400)
+                    .withEndAction(() -> tvResult.setVisibility(View.GONE))
+                    .start();
+        };
+        tvResult.postDelayed(hideResultRunnable, 4500);
+    }
+    private void playRaceMusicFromStart() {
+        try {
+            if (raceBgm != null) {
+                raceBgm.release(); // giải phóng player cũ để tránh IllegalState
+            }
+        } catch (Exception ignored) {}
+
+        raceBgm = MediaPlayer.create(this, R.raw.main_bg);
+        raceBgm.setLooping(true);
+        raceBgm.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // đảm bảo dừng nhạc khi app vào nền
+        if (raceBgm != null && raceBgm.isPlaying()) raceBgm.pause();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (hideResultRunnable != null) tvResult.removeCallbacks(hideResultRunnable);
+        if (sfx != null) sfx.release();
+        if (raceBgm != null) { raceBgm.release(); raceBgm = null; }
     }
 }

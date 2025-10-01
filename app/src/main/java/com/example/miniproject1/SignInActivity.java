@@ -22,6 +22,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     //Notify
     private final String REQUIRE = "Required";
 
+    private SoundEffects sfx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnSignIn = findViewById(R.id.btnSignIn);
+        //Sound set
+        sfx = new SoundEffects();
+        sfx.load(this, R.raw.click);
         //Su kien
         btnSignIn.setOnClickListener((View.OnClickListener) this);
     }
@@ -63,7 +68,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         int id = v.getId();
          if(id == R.id.btnSignIn){
+             sfx.play(R.raw.click, 1f);
             signIn();
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (sfx != null) sfx.release();
     }
 }
